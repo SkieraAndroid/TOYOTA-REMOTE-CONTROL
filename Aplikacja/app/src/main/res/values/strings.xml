@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Toyota Remote Control</string>
+    <string name="settings">Settings</string>
+    <string name="phone">Phone number of server:</string>
+    <string name="change_correct">Number was change correctly</string>
+    <string name="open">Opening...</string>
+    <string name="close">Closing...</string>
+    <string name="phone_error">Wrong format of phone number!</string>
+    <string name="server_open_message">OPEN</string>
+    <string name="server_close_message">CLOSE</string>
+</resources>
