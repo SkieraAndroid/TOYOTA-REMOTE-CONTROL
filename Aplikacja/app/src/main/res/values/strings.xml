@@ -8,4 +8,8 @@
     <string name="phone_error">Wrong format of phone number!</string>
     <string name="server_open_message">OPEN</string>
     <string name="server_close_message">CLOSE</string>
+    <string name="open_correct">Car was open successfully!</string>
+    <string name="close_correct">Car was close successfully!</string>
+    <string name="server_error">SOMETHING WENT WRONG !!!</string>
+
 </resources>

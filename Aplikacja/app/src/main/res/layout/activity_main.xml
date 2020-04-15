@@ -18,7 +18,7 @@
         app:srcCompat="@android:drawable/ic_menu_manage" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/key_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +36,7 @@
         android:onClick="myClickHandler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="@+id/key_image"
         app:srcCompat="@drawable/close" />
 
     <ImageView

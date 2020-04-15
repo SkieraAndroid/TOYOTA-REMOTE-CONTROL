@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
     public String phoneNumber = "+48517858688";
 
 
@@ -58,6 +59,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECEIVE_SMS)!=PackageManager.PERMISSION_GRANTED)
+        {
+            //check if the permission is not granted then check of the user has denied the permission
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.RECEIVE_SMS))
+            {
+
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.RECEIVE_SMS},
+                        MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+            }
+        }
+
     }
 
     public void myClickHandler(View view)
@@ -82,9 +100,28 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                } else {
+                }
+                else
+                {
                     Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+                            "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
+    }
+
+    public void onRequestRECEIVEPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "You didn't get permission to communicate with server!", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
