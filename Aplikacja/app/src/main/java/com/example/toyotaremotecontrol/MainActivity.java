@@ -2,12 +2,21 @@ package com.example.toyotaremotecontrol;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.Gravity;
@@ -16,24 +25,42 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
     private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
+
+    private static final String CHANNEL_ID = "ID";
+    private static final String CHANNEL_NAME = "Notification";
+    private static final String CHANNEL_DESC = "Car info";
     public String phoneNumber = "+48517858688";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME,NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(CHANNEL_DESC);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
 
         FloatingActionButton fab = findViewById(R.id.floatingActionButton);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 Intent exit =
                         new Intent(getApplicationContext(),Settings.class);
@@ -80,8 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void myClickHandler(View view)
     {
-        Toast toast;
-        SmsManager sms = SmsManager.getDefault();
+
         switch (view.getId())
         {
             case R.id.close_img:
@@ -143,5 +169,36 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), R.string.open,
                 Toast.LENGTH_LONG).show();
     }
+
+    public void displayOpenNotification()
+    {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this,CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_lock_open)
+                .setContentTitle(getString(R.string.car_name))
+                .setContentText(getString(R.string.open_correct))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),R.drawable.unlock));
+
+
+        NotificationManagerCompat mNotification = NotificationManagerCompat.from(this);
+        mNotification.notify(1,mBuilder.build());
+    }
+
+    public void displayCloseNotification()
+    {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this,CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_lock_close)
+                        .setContentTitle(getString(R.string.car_name))
+                        .setContentText(getString(R.string.close_correct))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),R.drawable.lock));
+
+
+        NotificationManagerCompat mNotification = NotificationManagerCompat.from(this);
+        mNotification.notify(1,mBuilder.build());
+    }
+
 
 }

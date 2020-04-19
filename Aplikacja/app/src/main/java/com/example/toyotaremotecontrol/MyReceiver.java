@@ -3,19 +3,21 @@ package com.example.toyotaremotecontrol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-public class MyReceiver extends BroadcastReceiver {
+public class MyReceiver extends BroadcastReceiver  {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = "SmsBroadcastReceiver";
+    private static final String CHANNEL_ID = "ID";
     String msg,phoneNo = "";
     String server_number = "+48517858688";
 
@@ -54,18 +56,49 @@ public class MyReceiver extends BroadcastReceiver {
 
                if(phoneNo.equals(server_number))
                {
-                  switch (msg)
+                   NotificationManagerCompat mNotification = NotificationManagerCompat.from(context);
+                           switch (msg)
                    {
                        case "A":
                            Toast.makeText(context,R.string.open_correct, Toast.LENGTH_LONG).show();
+
+                           NotificationCompat.Builder mBuilder =
+                                   new NotificationCompat.Builder(context,CHANNEL_ID)
+                                           .setSmallIcon(R.drawable.ic_lock_open)
+                                           .setContentTitle("Toyota Carina E")
+                                           .setContentText("Car was open successfully!")
+                                           .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                   .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.unlock));
+
+                           mNotification.notify(1,mBuilder.build());
+
                            break;
                        case "B":
                            Toast.makeText(context,R.string.close_correct, Toast.LENGTH_LONG).show();
-                          // Snackbar.make(context, getString(R.string.close_correct),Snackbar.LENGTH_LONG).show();
+                           NotificationCompat.Builder mBuilder2 =
+                                   new NotificationCompat.Builder(context,CHANNEL_ID)
+                                           .setSmallIcon(R.drawable.ic_lock_close)
+                                           .setContentTitle("Toyota Carina E")
+                                           .setContentText("Car was close successfully!")
+                                           .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.lock));
+
+                           mNotification.notify(1,mBuilder2.build());
                            break;
                        default:
                            Toast.makeText(context,R.string.server_error, Toast.LENGTH_LONG).show();
-                          // Snackbar.make(context, getString(R.string.server_error),Snackbar.LENGTH_LONG).show();
+
+                           NotificationCompat.Builder mBuilder3 =
+                                   new NotificationCompat.Builder(context,CHANNEL_ID)
+                                           .setSmallIcon(R.drawable.ic_lock_close)
+                                           .setContentTitle("Toyota Carina E")
+                                           .setContentText("COMMUNICATION ERROR!")
+                                           .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.error));
+
+
+                           mNotification.notify(1,mBuilder3.build());
+
                    }
 
 
@@ -76,4 +109,8 @@ public class MyReceiver extends BroadcastReceiver {
            }
        }
     }
+
+
+
+
 }

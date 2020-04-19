@@ -11,5 +11,10 @@
     <string name="open_correct">Car was open successfully!</string>
     <string name="close_correct">Car was close successfully!</string>
     <string name="server_error">SOMETHING WENT WRONG !!!</string>
+    <string name="car_name">Toyota Carina E</string>
+    <string name="message">My Notification</string>
+    <string name="channel_name">name</string>
+    <string name="channel_description">channel_description</string>
+
 
 </resources>
