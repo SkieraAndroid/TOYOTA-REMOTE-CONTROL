@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -25,6 +26,12 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_DESC = "Car info";
     public String phoneNumber = "+48517858688";
 
-
+    private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
+    private final String TASKS_TEXT_FILE = "app_data.txt";
+    private String NUMBER = "number";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+            restoreDataFromFile();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME,NotificationManager.IMPORTANCE_HIGH);
@@ -170,35 +180,32 @@ public class MainActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    public void displayOpenNotification()
-    {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_lock_open)
-                .setContentTitle(getString(R.string.car_name))
-                .setContentText(getString(R.string.open_correct))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),R.drawable.unlock));
 
+     private void restoreDataFromFile()
+     {
+        try
+        {
+            FileInputStream fileInputStream = openFileInput(TASKS_TEXT_FILE);
+            BufferedReader reader = new BufferedReader(new FileReader(fileInputStream.getFD()));
+            String line;
+            String delim = ";";
+            NUMBER = "";
+            while ((line = reader.readLine()) != null)
+            {
+                String[] line2 = line.split(delim);
+                phoneNumber = line2[0];
 
-        NotificationManagerCompat mNotification = NotificationManagerCompat.from(this);
-        mNotification.notify(1,mBuilder.build());
-    }
-
-    public void displayCloseNotification()
-    {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this,CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_lock_close)
-                        .setContentTitle(getString(R.string.car_name))
-                        .setContentText(getString(R.string.close_correct))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),R.drawable.lock));
-
-
-        NotificationManagerCompat mNotification = NotificationManagerCompat.from(this);
-        mNotification.notify(1,mBuilder.build());
-    }
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+     }
 
 
 }

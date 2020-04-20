@@ -13,6 +13,12 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class MyReceiver extends BroadcastReceiver  {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
@@ -20,7 +26,9 @@ public class MyReceiver extends BroadcastReceiver  {
     private static final String CHANNEL_ID = "ID";
     String msg,phoneNo = "";
     String server_number = "+48517858688";
-
+    private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
+    private final String TASKS_TEXT_FILE = "app_data.txt";
+    private String NUMBER = "number";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -108,8 +116,12 @@ public class MyReceiver extends BroadcastReceiver  {
 
            }
        }
-    }
 
+
+
+
+
+    }
 
 
 
