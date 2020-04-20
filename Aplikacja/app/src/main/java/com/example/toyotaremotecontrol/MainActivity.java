@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-            restoreDataFromFile();
+          restoreFromSharedPreferences();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL_NAME,NotificationManager.IMPORTANCE_HIGH);
@@ -207,5 +207,23 @@ public class MainActivity extends AppCompatActivity {
         }
      }
 
+    private void saveToSharedPreferences()
+    {
+        SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+
+        editor.clear();
+
+        editor.putString(NUMBER,phoneNumber);
+
+        editor.apply();
+    }
+
+    private void restoreFromSharedPreferences()
+    {
+        SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
+        phoneNumber="";
+        phoneNumber = data.getString(NUMBER,"0");
+    }
 
 }

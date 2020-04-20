@@ -30,7 +30,7 @@ public class Settings extends AppCompatActivity {
     private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
     private final String TASKS_TEXT_FILE = "app_data.txt";
     private String NUMBER = "number";
-
+    public String phoneNumber = "+48517858688";
 
 
     @Override
@@ -38,9 +38,10 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_settings);
-        restoreDataFromFile();
+
+        restoreFromSharedPreferences();
         EditText number_text = findViewById(R.id.editText);
-        number_text.setText(NUMBER);
+        number_text.setText(phoneNumber);
 
         final FloatingActionButton fab = findViewById(R.id.floatingActionButton2);
 
@@ -59,7 +60,7 @@ public class Settings extends AppCompatActivity {
 
                     toast.show();
                     NUMBER ="+48"+phone_number;
-                    saveDataToFile();
+                    saveToSharedPreferences();
 
                     Intent exit =
                             new Intent(getApplicationContext(), MainActivity.class);
@@ -126,6 +127,22 @@ public class Settings extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void saveToSharedPreferences()
+    {
+        SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
 
+        editor.clear();
+
+        editor.putString(NUMBER,phoneNumber);
+
+        editor.apply();
+    }
+
+    private void restoreFromSharedPreferences()
+    {
+        SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
+         phoneNumber = data.getString(NUMBER,phoneNumber);
+    }
 
 }
