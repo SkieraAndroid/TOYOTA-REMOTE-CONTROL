@@ -15,22 +15,13 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 
 public class Settings extends AppCompatActivity {
 
     private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
-    private final String TASKS_TEXT_FILE = "app_data.txt";
-    private String NUMBER = "number";
-    public String phoneNumber = "+48517858688";
+    private final String NUMBER = "number";
+    public String phoneNumber = "";
 
 
     @Override
@@ -55,18 +46,20 @@ public class Settings extends AppCompatActivity {
                 EditText number = findViewById(R.id.editText);
                 String phone_number = number.getText().toString();
 
-                if(phone_number.length()==9 && phone_number.matches("([5-8]?[0-9]{8})")) {
+                if(phone_number.length()==12 && phone_number.matches("([+]?[4]?[8]?[5-8]?[0-9]{8})")) {
                     Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.change_correct), Toast.LENGTH_LONG);
 
                     toast.show();
-                    NUMBER ="+48"+phone_number;
+                    phoneNumber =phone_number;
                     saveToSharedPreferences();
 
+
                     Intent exit =
-                            new Intent(getApplicationContext(), MainActivity.class);
+                            new Intent(getApplicationContext(),MainActivity.class);
+
+                    startActivityForResult(exit,1);
 
 
-                    startActivityForResult(exit, 1);
                 }
                 else
                 {
@@ -80,53 +73,6 @@ public class Settings extends AppCompatActivity {
 
     }
 
-
-
-    private void saveDataToFile()
-    {
-        try(FileOutputStream fileOutputStream = openFileOutput(TASKS_TEXT_FILE,MODE_PRIVATE))
-        {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileOutputStream.getFD()));
-
-            String delim = ";";
-
-            String line = NUMBER + delim;
-
-            writer.write(line);
-            writer.newLine();
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    private void restoreDataFromFile()
-    {
-        try
-        {
-            FileInputStream fileInputStream = openFileInput(TASKS_TEXT_FILE);
-            BufferedReader reader = new BufferedReader(new FileReader(fileInputStream.getFD()));
-            String line;
-            String delim = ";";
-            NUMBER = "";
-            while ((line = reader.readLine()) != null)
-            {
-                String[] line2 = line.split(delim);
-                NUMBER = line2[0];
-
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
     private void saveToSharedPreferences()
     {
         SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);

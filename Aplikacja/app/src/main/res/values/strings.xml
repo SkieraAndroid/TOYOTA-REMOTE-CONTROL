@@ -15,6 +15,8 @@
     <string name="message">My Notification</string>
     <string name="channel_name">name</string>
     <string name="channel_description">channel_description</string>
+    <string name="info_desc">Entered number should contain international prefix!</string>
+    <string name="info">CAUTION:</string>
 
 
 </resources>

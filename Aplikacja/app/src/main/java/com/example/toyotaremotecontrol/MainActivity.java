@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "ID";
     private static final String CHANNEL_NAME = "Notification";
     private static final String CHANNEL_DESC = "Car info";
-    public String phoneNumber = "+48517858688";
+    public String phoneNumber = "";
 
     private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
-    private final String TASKS_TEXT_FILE = "app_data.txt";
+
     private String NUMBER = "number";
 
     @Override
@@ -147,22 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onRequestRECEIVEPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),
-                            "You didn't get permission to communicate with server!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-        }
-    }
 
     protected void sendTextMessageClose()
     {
@@ -170,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         smsManager.sendTextMessage(phoneNumber, null,  getString(R.string.server_close_message), null, null);
         Toast.makeText(getApplicationContext(), R.string.close,
                 Toast.LENGTH_LONG).show();
+
     }
 
     protected void sendTextMessageOpen()
@@ -181,49 +167,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-     private void restoreDataFromFile()
-     {
-        try
-        {
-            FileInputStream fileInputStream = openFileInput(TASKS_TEXT_FILE);
-            BufferedReader reader = new BufferedReader(new FileReader(fileInputStream.getFD()));
-            String line;
-            String delim = ";";
-            NUMBER = "";
-            while ((line = reader.readLine()) != null)
-            {
-                String[] line2 = line.split(delim);
-                phoneNumber = line2[0];
-
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-     }
-
-    private void saveToSharedPreferences()
-    {
-        SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-
-        editor.clear();
-
-        editor.putString(NUMBER,phoneNumber);
-
-        editor.apply();
-    }
 
     private void restoreFromSharedPreferences()
     {
         SharedPreferences data = getSharedPreferences(TASKS_SHARED_PREFS,MODE_PRIVATE);
         phoneNumber="";
-        phoneNumber = data.getString(NUMBER,"0");
+        phoneNumber = data.getString(NUMBER,phoneNumber);
     }
 
 }

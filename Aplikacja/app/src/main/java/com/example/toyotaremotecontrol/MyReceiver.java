@@ -26,16 +26,20 @@ public class MyReceiver extends BroadcastReceiver  {
     private static final String TAG = "SmsBroadcastReceiver";
     private static final String CHANNEL_ID = "ID";
     String msg,phoneNo = "";
-    String server_number = "+48517858688";
+   // String server_number = "+48517858688";
     private final String TASKS_SHARED_PREFS = "DataSharedPrefs";
-    private final String TASKS_TEXT_FILE = "app_data.txt";
     private String NUMBER = "number";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
         //retrieving the general action to be performed and display on log
 
-       Log.i(TAG,"Intent Received: " + intent.getAction());
+        SharedPreferences data = context.getSharedPreferences(TASKS_SHARED_PREFS, Context.MODE_PRIVATE);
+        String server_number = data.getString(NUMBER,"+48517858688");
+
+
+        Log.i(TAG,"Intent Received: " + intent.getAction());
        if(intent.getAction()==SMS_RECEIVED)
        {
            //retreiving a map of extending data from the intent
@@ -69,7 +73,7 @@ public class MyReceiver extends BroadcastReceiver  {
                            switch (msg)
                    {
                        case "A":
-                           Toast.makeText(context,R.string.open_correct, Toast.LENGTH_LONG).show();
+
 
                            NotificationCompat.Builder mBuilder =
                                    new NotificationCompat.Builder(context,CHANNEL_ID)
@@ -83,7 +87,7 @@ public class MyReceiver extends BroadcastReceiver  {
 
                            break;
                        case "B":
-                           Toast.makeText(context,R.string.close_correct, Toast.LENGTH_LONG).show();
+
                            NotificationCompat.Builder mBuilder2 =
                                    new NotificationCompat.Builder(context,CHANNEL_ID)
                                            .setSmallIcon(R.drawable.ic_lock_close)
@@ -95,7 +99,7 @@ public class MyReceiver extends BroadcastReceiver  {
                            mNotification.notify(1,mBuilder2.build());
                            break;
                        default:
-                           Toast.makeText(context,R.string.server_error, Toast.LENGTH_LONG).show();
+
 
                            NotificationCompat.Builder mBuilder3 =
                                    new NotificationCompat.Builder(context,CHANNEL_ID)
